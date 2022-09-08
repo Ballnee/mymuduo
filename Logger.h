@@ -64,10 +64,8 @@ public:
     //设置日志级别
     void setLogLevel(int level);
     void log(std::string msg);
-
 private:
     int logLevel_;
-
     Logger(){}
 
 };
