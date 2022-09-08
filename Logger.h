@@ -67,6 +67,7 @@ public:
 
 private:
     int logLevel_;
+
     Logger(){}
 
 };
