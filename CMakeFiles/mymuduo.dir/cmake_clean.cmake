@@ -1,5 +1,9 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/mymuduo.dir/Channel.o"
+  "CMakeFiles/mymuduo.dir/EventLoop.o"
+  "CMakeFiles/mymuduo.dir/InetAddress.o"
   "CMakeFiles/mymuduo.dir/Logger.o"
+  "CMakeFiles/mymuduo.dir/TcpServer.o"
   "CMakeFiles/mymuduo.dir/TimeStamp.o"
   "lib/libmymuduo.pdb"
   "lib/libmymuduo.so"

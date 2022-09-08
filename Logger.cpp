@@ -4,6 +4,7 @@
 
 #include "Logger.h"
 #include "TimeStamp.h"
+
 Logger& Logger::instance() {
     static Logger logger;
     return logger;
@@ -11,7 +12,6 @@ Logger& Logger::instance() {
 
 void Logger::setLogLevel(int level) {
     logLevel_ = level;
-    return;
 }
 
 //写日志 {日志级别} time ：msg
