@@ -33,7 +33,8 @@
             logger.setLogLevel(FATAL);            \
             char buf[1024]  = {0}; \
             snprintf(buf,1024,LogMsgFormat,##__VA_ARGS__); \
-            logger.log(buf); \
+            logger.log(buf);        \
+            exit(-1);                                \
     }while(0)
 
 #ifdef MUDEBUG

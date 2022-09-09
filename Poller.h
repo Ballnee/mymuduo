@@ -11,6 +11,7 @@
 #include "iostream"
 #include "unordered_map"
 #include "TimeStamp.h"
+#include "EventLoop.h"
 class Channel;
 class EventLoop;
 
