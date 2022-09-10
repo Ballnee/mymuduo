@@ -20,6 +20,4 @@ namespace CurrentThread {
 }
 
 
-
-
 #endif //MYMUDUO_CURRENTTHREAD_H

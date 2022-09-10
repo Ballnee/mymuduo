@@ -5,6 +5,7 @@
 #include "Channel.h"
 #include "Logger.h"
 #include "sys/epoll.h"
+#include "EventLoop.h"
 const int Channel::kNoneEvent = 0;
 const int Channel::kReadEvent = EPOLLIN | EPOLLPRI ;
 const int Channel::kWriteEvent = EPOLLOUT;
@@ -22,14 +23,12 @@ void Channel::tie(const std::shared_ptr<void> &obj) {
 //Eventloop => channelList poller
 void Channel::update() {
     //通过channel所属的EventLoop调用pooler相应的方法 注册fd的event事件
-    //to do...
-//    loop_->updateChannel(this);
+    loop_->updateChannel(this);
 }
 
 //在channel所属的EventLoop中，把当前的channel删除掉
 void Channel::remove() {
-    //todo..
-//    loop_->removeChannel();
+    loop_->removeChannel(this);
 }
 void Channel::handleEvent(TimeStamp receiveTime) {
     if (tied_) {
@@ -64,8 +63,4 @@ void Channel::handleEventWithGuard(TimeStamp receiveTime) {
             writeCallback_();
         }
     }
-}
-
-int main(){
-    return 0;
 }

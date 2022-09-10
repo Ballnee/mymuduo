@@ -14,4 +14,3 @@ namespace CurrentThread {
      }
 }
 
-int main(){return 0;}
