@@ -7,6 +7,7 @@
 #include "noncopyable.h"
 #include "InetAddress.h"
 
+
 //socket fd
 class Socket: noncopyable{
 public:
@@ -18,7 +19,7 @@ public:
     void listen();
     int accept(InetAddress *peerAddress);
     void shutdownWrite();
-
+    int static createNonBlockingFd();
     void setTcpNoDelay(bool on);
     void setReuseAddr(bool on);
     void setReusePort(bool on);

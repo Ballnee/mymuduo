@@ -37,6 +37,14 @@ int Socket::accept(InetAddress *peerAddress) {
     return connFd;
 }
 
+int Socket::createNonBlockingFd() {
+    int sockFd = ::socket(AF_INET,SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC,IPPROTO_TCP);
+    if(sockFd < 0) {
+        LOG_FATAL("cSocket::createNonBlockingFd failed\n");
+    }
+    return sockFd;
+}
+
 void Socket::shutdownWrite() {
     if (::shutdown(sockFd_,SHUT_WR) < 0) {
         LOG_ERROR("sockets::shutdownWrite!");
