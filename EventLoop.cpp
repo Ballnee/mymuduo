@@ -57,7 +57,7 @@ EventLoop::~EventLoop() {
     t_loopInThisThread = nullptr;
 }
 
-void EventLoop::loop() {
+void EventLoop:: loop() {
     looping_ = true;
     quit_ = false;
     LOG_INFO("EventLoop %p start looping \n", this);
