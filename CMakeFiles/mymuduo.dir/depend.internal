@@ -108,6 +108,7 @@ CMakeFiles/mymuduo.dir/TcpConnection.o
  /home/ball/mymuduo/noncopyable.h
 CMakeFiles/mymuduo.dir/TcpServer.o
  /home/ball/mymuduo/Acceptor.h
+ /home/ball/mymuduo/Buffer.h
  /home/ball/mymuduo/Callbacks.h
  /home/ball/mymuduo/Channel.h
  /home/ball/mymuduo/CurrentThread.h
@@ -117,6 +118,7 @@ CMakeFiles/mymuduo.dir/TcpServer.o
  /home/ball/mymuduo/InetAddress.h
  /home/ball/mymuduo/Logger.h
  /home/ball/mymuduo/Socket.h
+ /home/ball/mymuduo/TcpConnection.h
  /home/ball/mymuduo/TcpServer.cpp
  /home/ball/mymuduo/TcpServer.h
  /home/ball/mymuduo/Thread.h

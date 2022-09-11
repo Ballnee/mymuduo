@@ -293,8 +293,12 @@ Callbacks.h
 /home/ball/mymuduo/TcpServer.cpp
 TcpServer.h
 /home/ball/mymuduo/TcpServer.h
+TcpConnection.h
+/home/ball/mymuduo/TcpConnection.h
 Logger.h
 /home/ball/mymuduo/Logger.h
+strings.h
+/home/ball/mymuduo/strings.h
 
 /home/ball/mymuduo/TcpServer.h
 EventLoop.h
