@@ -19,7 +19,7 @@ public:
 
     void setNewConnectionCallback(const NewConnectionCallback& cb){newConnectionCallback_ = std::move(cb);}
 
-    bool listening()const {return listening_;}
+    bool listening() const {return listening_;}
     void listen();
 private:
     void handleRead();
