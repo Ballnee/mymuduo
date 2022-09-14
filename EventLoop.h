@@ -55,7 +55,7 @@ private:
     int wakeupFd_;//主要作用，当mainLoop获取一个新用户的channel，通过轮询算法选择一个subloop，通过该成员唤醒subloop
     std::unique_ptr<Channel> wakeupChannel_;
 
-    ChannelList activeChennels_;
+    ChannelList activeChannels_;
     Channel* currentActiveChannel_;
 
     std::atomic_bool  callingPendingFunctors_;//标识当前loop是否需要执行回调

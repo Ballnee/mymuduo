@@ -50,6 +50,9 @@ public:
             retrieveAll();
         }
     }
+    std::string retrieveAllAsString(){
+        return retrieveAsString(readableBytes());
+    }
     //把[data,data+len]内存中的数据追加在缓冲中
     void append(const char *data,size_t len) {
         ensureWriteableBytes(len);
@@ -76,9 +79,7 @@ private:
     }
     //
     //把onMessage函数上报的数据转成string返回
-    std::string retrieveAllAsString(){
-        return retrieveAsString(readableBytes());
-    }
+
 
     std::string retrieveAsString(size_t len){
         std::string result(peek(),len);

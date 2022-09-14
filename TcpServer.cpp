@@ -20,7 +20,8 @@ TcpServer::TcpServer(EventLoop *loop, const InetAddress &listenAddr, const std::
                     threadPool_(new EventLoopThreadPool(loop,nameArg)),
                     connectionCallback_(),
                     messageCallback_(),
-                    nextConnId_(1){
+                    nextConnId_(1),
+                    started_(0){
     //写入新用户连接时的回调函数
     acceptor_->setNewConnectionCallback(std::bind(&TcpServer::newConnection,
                                                   this,std::placeholders::_1,std::placeholders::_2));

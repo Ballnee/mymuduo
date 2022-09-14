@@ -14,6 +14,8 @@
 #include "EventLoopThreadPool.h"
 #include "InetAddress.h"
 #include "noncopyable.h"
+#include "TcpConnection.h"
+#include "Buffer.h"
 #include "Callbacks.h"
 #include "atomic"
 #include "unordered_map"

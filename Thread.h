@@ -35,6 +35,7 @@ private:
     pid_t tid_;
     ThreadFunc func_;
     std::string name_;
+
     static std::atomic<int> numCreated_;
 };
 

@@ -21,6 +21,7 @@ Acceptor::Acceptor(EventLoop *loop, const InetAddress &listenAddr, bool reusePor
 }
 
 Acceptor::~Acceptor() {
+    std::cout<<"Acceptor::~Acceptor"<<std::endl;
     acceptChannel.disableAll();
     acceptChannel.remove();
 }

@@ -35,6 +35,7 @@ TcpConnection::TcpConnection(EventLoop *loop, const std::string &name, int sockF
 }
 
 TcpConnection::~TcpConnection() {
+    std::cout<<"TcpConnection::~TcpConnection()"<<std::endl;
     LOG_INFO("TcpConnection::~TcpConnection %s at fd=%d state=%d\n",name_.c_str(),channel_->fd(),(int)state_);
 }
 

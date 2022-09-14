@@ -33,6 +33,7 @@ EpollPoller::~EpollPoller()  {
 
 TimeStamp EpollPoller::poll(int timeoutMs,ChannelList *activeChannels){
     LOG_INFO("[EpollPoller::poll: fd total count:%d\n",static_cast<int>(channels_.size()));
+
     int numEvents = ::epoll_wait(epollFd_,&*events_.begin(),static_cast<int>(events_.size()),timeoutMs);
     int saveErrno = errno;
     TimeStamp now(TimeStamp::now());
@@ -98,6 +99,7 @@ void EpollPoller::removeChannel(Channel *channel){
 }
 
 void EpollPoller::fillActiveChannels(int numEvents,ChannelList *activeChannels) const{
+
     for (int i = 0; i < numEvents; ++i) {
         Channel* channel = static_cast<Channel*>(events_[i].data.ptr);
         channel->set_revents(events_[i].events);
@@ -111,8 +113,8 @@ void EpollPoller::update(int operation,Channel* channel){
     int fd = channel->fd();
     event.events = channel->events();
     event.data.ptr = channel;
-    event.data.fd = fd;
-
+    Channel* c = static_cast<Channel*>(event.data.ptr);
+//    event.data.fd = fd;
     if (::epoll_ctl(epollFd_,operation,fd,&event) < 0) {
         if (operation == EPOLL_CTL_DEL){
             LOG_ERROR("[EpollPoller::update:epoll_ctl_del error:%d",errno);
@@ -120,5 +122,4 @@ void EpollPoller::update(int operation,Channel* channel){
             LOG_FATAL("[EpollPoller::update:epoll_ctl add/mod error:%d\n",errno);
         }
     }
-
 }

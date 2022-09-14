@@ -61,7 +61,9 @@ public:
     EventLoop* ownerLoop() {return loop_;}
 
     void remove();
-
+    void printRevents(){
+        std::cout<<"revents = "<<revents_<<std::endl;
+    }
 private:
     void update();
     void handleEventWithGuard(TimeStamp receiveTime);
@@ -75,6 +77,7 @@ private:
     int events_;//注册fd感兴趣的事件
     int revents_;
     int index_;
+
     std::weak_ptr<void> tie_;
     bool tied_;
 
