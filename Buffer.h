@@ -59,7 +59,22 @@ public:
         std::copy(data,data+len,beginWrite());
         writerIndex_ += len;
     }
+    void retrieveAll(){
+        readerIndex_ = writerIndex_ = kCheapPrepend;
+    }
+
+    //把onMessage函数上报的数据转成string返回
+    std::string retrieveAsString(size_t len){
+        std::string result(peek(),len);
+        retrieve(len);
+        return result;
+    }
 private:
+    //返回可读事件的起始地址
+    const char* peek() const {
+        return begin() + readerIndex_;
+    }
+
     char* begin() {
         //底层首元素地址
         return &*buffer_.begin();
@@ -67,32 +82,12 @@ private:
     const char* begin() const {
         return &*buffer_.begin();
     }
-    //返回可读事件的起始地址
-    const char* peek() const {
-        return begin() + readerIndex_;
-    }
-
-
-
-    void retrieveAll(){
-        readerIndex_ = writerIndex_ = kCheapPrepend;
-    }
-    //
-    //把onMessage函数上报的数据转成string返回
-
-
-    std::string retrieveAsString(size_t len){
-        std::string result(peek(),len);
-        retrieve(len);
-        return result;
-    }
 
     void ensureWriteableBytes(size_t len) {
         if (writableBytes() < len) {
             makeSpace(len);
         }
     }
-
 
     char* beginWrite(){
         return begin()+writerIndex_;

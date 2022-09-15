@@ -14,13 +14,14 @@ public:
             loop_(loop){
         server_.setConnectionCallback(
             std::bind(&EchoServer::onConnection,this,std::placeholders::_1));
-        server_.setMessageCallback(std::bind(&EchoServer::onMessage,this,
-                                             std::placeholders::_1,std::placeholders::_2,std::placeholders::_3));
+//        server_.setMessageCallback(std::bind(&EchoServer::onMessage,this,
+//                                             std::placeholders::_1,std::placeholders::_2,std::placeholders::_3));
         server_.setThreadNum(3);
     }
     void start(){
         server_.start();
     }
+
 
 private:
     void onConnection(const TcpConnectionPtr &conn){
@@ -33,7 +34,7 @@ private:
     void onMessage(const TcpConnectionPtr &conn,Buffer *buffer,TimeStamp time) {
         std::string msg = buffer->retrieveAllAsString();
         conn->send(msg);
-//        conn->shutdown();
+        conn->shutdown();
     }
     EventLoop *loop_;
     TcpServer server_;
@@ -44,7 +45,9 @@ int main(){
     EventLoop loop;
     InetAddress address(8000);
     EchoServer server(&loop,address,"EchoServer");
+    EchoServer server1(&loop,InetAddress(9000),"EchoServer1");
     server.start();
+    server1.start();
     loop.loop();
     return 0;
 }

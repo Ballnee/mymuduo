@@ -47,7 +47,7 @@ void EventLoopThread::threadFunc() {
         loop_ = &loop;
         cond_.notify_one();
     }
-    //开始监听读写事件或者新连接
+    //开始监听读写事件
     loop.loop();//EventLoop loop -> Poller.poll
     std::unique_lock<std::mutex> lock(mutex_);
     loop_ = nullptr;  //退出事件循环

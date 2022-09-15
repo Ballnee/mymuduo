@@ -12,7 +12,9 @@ EventLoopThreadPool::EventLoopThreadPool(EventLoop *baseLoop, const std::string 
                             numThreads_(0),
                             next_(0){}
 
-EventLoopThreadPool::~EventLoopThreadPool() {}
+EventLoopThreadPool::~EventLoopThreadPool() {
+    //Dont delete loop its stack variable
+}
 
 void EventLoopThreadPool::start(const ThreadInitCallback &cb) {
     started_ = true;

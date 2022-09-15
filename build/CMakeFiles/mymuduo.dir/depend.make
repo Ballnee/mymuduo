@@ -125,6 +125,7 @@ CMakeFiles/mymuduo.dir/TcpServer.o: ../TimeStamp.h
 CMakeFiles/mymuduo.dir/TcpServer.o: ../noncopyable.h
 
 CMakeFiles/mymuduo.dir/Thread.o: ../CurrentThread.h
+CMakeFiles/mymuduo.dir/Thread.o: ../Logger.h
 CMakeFiles/mymuduo.dir/Thread.o: ../Thread.cpp
 CMakeFiles/mymuduo.dir/Thread.o: ../Thread.h
 CMakeFiles/mymuduo.dir/Thread.o: ../noncopyable.h

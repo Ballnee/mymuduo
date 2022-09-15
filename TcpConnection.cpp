@@ -48,7 +48,7 @@ void TcpConnection::send(const std::string& buf) {
         }
     }
 }
-
+//在内核缓冲足够的情况下直接写，不够的时候写用户输出缓冲输出再慢慢写内核缓冲
 void TcpConnection::sendInLoop(const void *message, size_t len) {
         ssize_t nwrote = 0;
         size_t remaining = len;
@@ -58,6 +58,7 @@ void TcpConnection::sendInLoop(const void *message, size_t len) {
             LOG_ERROR("disconnected,give up writing!");
             return;
         }
+        //
         if(!channel_->isWriting() && outputBuffer_.readableBytes() == 0) {
             nwrote = ::write(channel_->fd(),message,len);
             if(nwrote >= 0) {
@@ -99,8 +100,12 @@ void TcpConnection::connectEstablished() {
     setState(kConnected);
     channel_->tie(shared_from_this());//把channel对象和TcpConnection对象绑定
     channel_->enableReading();//在poller上面创建监听读事件
+
     //新连接建立，执行回调
-    connectionCallback_(shared_from_this());
+    if(connectionCallback_) {
+        connectionCallback_(shared_from_this());
+    }
+
 }
 
 void TcpConnection::connectDestroyed() {
@@ -113,6 +118,7 @@ void TcpConnection::connectDestroyed() {
 }
 
 void TcpConnection::shutdown() {
+
     if(state_ == kConnected){
         setState(kDisconnecting);
         loop_->runInLoop(
@@ -132,7 +138,9 @@ void TcpConnection::handleRead(TimeStamp receiveTime) {
     ssize_t n = inputBuffer_.readFd(channel_->fd(),&savedErrno);
     if (n > 0) {
         //已连接的用户发生了可读事件 执行回调
-        messageCallback_(shared_from_this(),&inputBuffer_,receiveTime);
+        if (messageCallback_) {
+            messageCallback_(shared_from_this(),&inputBuffer_,receiveTime);
+        }
     }else if (n == 0) {
         handleClose();
     }else {
@@ -144,15 +152,21 @@ void TcpConnection::handleRead(TimeStamp receiveTime) {
 void TcpConnection::handleWrite() {
     if (channel_->isWriting()) {
         int savedError = 0;
+//        向内核tcp缓冲写入n字节
         ssize_t n = outputBuffer_.writeFd(channel_->fd(),&savedError);
+        //直到写完为止
         if (n > 0 ) {
+            //更新缓冲区的下标
             outputBuffer_.retrieve(n);
+            //用户的输出缓冲区没有数据要写了，则写完了，标记对写事件不感兴趣
             if(outputBuffer_.readableBytes() == 0) {
                 channel_->disableWriting();
+                //如果注册了写回调，执行
                 if(writeCompleteCallback_) {
                     loop_->queueInLoop(std::bind(writeCompleteCallback_,shared_from_this()));
                 }
             }
+            //如果用户的输出缓冲区还有数据是不会关闭写端的，epoll写事件会接着触发
             if(state_ == kDisconnecting) {
                 shutdownInLoop();
             }
@@ -166,13 +180,16 @@ void TcpConnection::handleWrite() {
 
 
 void TcpConnection::handleClose() {
+    LOG_INFO("TcpConnection::handleClose()");
     LOG_INFO("fd=%d state=%d \n",channel_->fd(),int (state_));
     setState(kDisconnected);
     channel_->disableAll();
 
     TcpConnectionPtr connPtr(shared_from_this());
-    connectionCallback_(connPtr);
-    closeCallback_(connPtr);
+    if (closeCallback_) {
+        closeCallback_(connPtr);
+    }
+
 }
 
 void TcpConnection::handleError() {

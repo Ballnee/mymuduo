@@ -88,9 +88,12 @@ void EventLoop:: loop() {
 //在当前线程中执行cb
 void EventLoop::runInLoop(Functor cb) {
     if (isInLoopThread()) {//在当前线程中执行cb
+        LOG_INFO("this thread is myself\n");
         cb();
     }else {  //在非当前线程中执行cb，则需要唤醒loop所在线程 执行cb
+        LOG_INFO("this thread is not  myself\n");
         queueInLoop(cb);
+        LOG_INFO("add connection callback\n");
     }
 }
 

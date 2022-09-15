@@ -126,6 +126,7 @@ CMakeFiles/mymuduo.dir/TcpServer.o
  /home/ball/mymuduo/noncopyable.h
 CMakeFiles/mymuduo.dir/Thread.o
  /home/ball/mymuduo/CurrentThread.h
+ /home/ball/mymuduo/Logger.h
  /home/ball/mymuduo/Thread.cpp
  /home/ball/mymuduo/Thread.h
  /home/ball/mymuduo/noncopyable.h

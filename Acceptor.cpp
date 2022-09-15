@@ -28,7 +28,9 @@ Acceptor::~Acceptor() {
 
 void Acceptor::listen() {
     listening_ = true;
+    //在fd上监听
     acceptSocket_.listen();
+    //poller注册fd可读事件
     acceptChannel.enableReading();
 }
 //listenFd 有事件发生，即有新连接

@@ -65,7 +65,6 @@ private:
 
     void sendInLoop(const void* message,size_t len);
 
-
     EventLoop *loop_;//这里绝对不是baseLoop，因为TcpConnection都在subLoop中管理
     const std::string name_;
     std::atomic<StateE> state_;
@@ -73,6 +72,7 @@ private:
 
     std::unique_ptr<Socket> socket_;
     std::unique_ptr<Channel> channel_;
+
     const InetAddress  localAddr_;
     const InetAddress  peerAddr_;
 

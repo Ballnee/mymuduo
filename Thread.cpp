@@ -5,6 +5,7 @@
 #include "Thread.h"
 #include "CurrentThread.h"
 #include <semaphore.h>
+#include "Logger.h"
 std::atomic_int Thread::numCreated_(0);
 
 Thread::Thread(ThreadFunc func, const std::string &name) :
@@ -30,6 +31,7 @@ void Thread::start() {
     thread_ = std::shared_ptr<std::thread>(new std::thread([&](){
         tid_ = CurrentThread::tid();
         sem_post(&sem);
+        //这个就是上层创建的ThreadFunc
         func_();
     }));
 //    这里必须等待获取上面新线程的tid值
