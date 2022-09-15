@@ -61,6 +61,9 @@ EventLoop::~EventLoop() {
 void EventLoop:: loop() {
     looping_ = true;
     quit_ = false;
+    if(threadId_ != CurrentThread::tid()) {
+        LOG_FATAL("EventLoop:: loop is not same loop");
+    }
     LOG_INFO("EventLoop %p start looping \n", this);
     while(!quit_) {
         activeChannels_.clear();
