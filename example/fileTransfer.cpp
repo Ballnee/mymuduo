@@ -3,6 +3,7 @@
 //
 #include "mymuduo/Logger.h"
 #include "mymuduo/TcpServer.h"
+#include "mymuduo/Channel.h"
 #include<fstream>
 #include <sstream>
 #include "iostream"

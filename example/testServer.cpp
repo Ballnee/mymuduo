@@ -40,25 +40,15 @@ private:
     TcpServer server_;
 };
 
-EventLoop* g_loop;
-
-void threadFunc(){
-    g_loop->loop();
-}
 
 int main(){
-//    EventLoop loop;
-//    InetAddress address(8000);
-//    EchoServer server(&loop,address,"EchoServer");
-//    EchoServer server1(&loop,InetAddress(9000),"EchoServer1");
-//    server.start();
-//    server1.start();
-//    loop.loop();
-
     EventLoop loop;
-    g_loop = &loop;
-    Thread t(threadFunc,"test");
-    t.start();
-    t.join();
-    return 0;
+    InetAddress address(8000);
+    EchoServer server(&loop,address,"EchoServer");
+    EchoServer server1(&loop,InetAddress(9000),"EchoServer1");
+    server.start();
+    server1.start();
+    loop.loop();
+
+
 }
