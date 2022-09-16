@@ -28,6 +28,7 @@ public:
     static Poller* newDefaultPoller(EventLoop* loop);
 protected:
 //    map的key表示的是socketfd，value就是sockfd所属的通道
+//     protected外界无法访问但是派生类可以访问
     using ChannelMap = std::unordered_map<int,Channel*>;
     ChannelMap channels_;
 private:
