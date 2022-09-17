@@ -5,7 +5,8 @@
 #include "functional"
 
 #include "iostream"
-
+#include "thread"
+#include "unistd.h"
 
 class TestCallback{
 public:
@@ -40,8 +41,20 @@ private:
     TestCallback* testCallback_;
 };
 
+int sum = 0;
+void Thread01(int id) {
+    while(id++ < 1000)
+        asm volatile("lock add $1,%0": "+m"(sum));
+        //        sum++;
+}
 
 int main(){
-    Callback c;
+    std::thread t1(Thread01,0);
+    std::thread t2(Thread01,0);
+    t1.join();
+    t2.join();
+
+    std::cout<<"main sum ="<<sum<<"\n";
+    return 0;
 
 }

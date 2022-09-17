@@ -40,7 +40,11 @@ public:
     //EventLoop线程的线程id和当前线程（即调用当前成员函数的线程）的线程id
     //相当于A线程创建了一个对象，A自己去执行对象的成员函数或者A线程开启B线程去执行对象的成员函数
     bool isInLoopThread() const {return threadId_ == CurrentThread::tid();}
-
+    void assertInLoopThread(){
+        if (!isInLoopThread()) {
+            LOG_FATAL(" Current thread id :%d is not as same as this obj thread id :%d\n",CurrentThread::tid(),threadId_);
+        }
+    }
 
 private:
     void handleRead();  //wake up

@@ -9,6 +9,7 @@
 #include "TimeStamp.h"
 #include "atomic"
 #include "mutex"
+#include "memory"
 
 class Timer : noncopyable {
 public:
@@ -28,6 +29,7 @@ public:
     int64_t sequence() const { return sequence_; }
 
     void restart(TimeStamp now) {
+        //如果是重复的定时器，重新计算下一个超时时刻
         if (repeat_){
             int64_t delta = static_cast<int64_t>(interval_ * TimeStamp::kMicroSecondsPerSecond);
             expiration_ = TimeStamp(now.microSecondsSinceEpoch() + delta);
@@ -37,9 +39,11 @@ public:
     }
 
     int64_t numCreated() {
-        latch_.lock();
-        int64_t ret = s_numCreated_;
-        latch_.unlock();
+        int64_t ret = 0;
+        {
+            std::unique_lock<std::mutex> lock(latch_);
+            ret = s_numCreated_;
+        }
         return ret;
     }
 
@@ -49,6 +53,7 @@ private:
     const double interval_;         //超时时间间隔，如果是一次性定时器，该值为0
     const bool repeat_;             //是否需要重fu发生
     const int64_t sequence_;        // 定时器序号，不会重
+
 
     std::mutex latch_;
     static std::atomic_int64_t     s_numCreated_; //定时器计数，当前已经创建的定时器数量
