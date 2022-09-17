@@ -32,8 +32,8 @@ private:
     //一个根据定时器地址来存储，但是存储的定时器都是同一个，目的是为了区分同一到期时间的定时器？？？
     //支持定时器时间相同
     //Entry 时间戳和定时器对象的地址（定时器对象包括，超时时刻，回调函数，定时器序号，是否需要重复定时标志等）
-//    using Entry = std::pair<TimeStamp,Timer*>;
-    typedef std::pair<TimeStamp, Timer*> Entry;
+    using Entry = std::pair<TimeStamp,Timer*>;
+//    typedef std::pair<TimeStamp, Timer*> Entry;
     using TimerList = std::set<Entry>;
     using ActiveTimer = std::pair<Timer*,int64_t>;
     using ActiveTimerSet = std::set<ActiveTimer>;

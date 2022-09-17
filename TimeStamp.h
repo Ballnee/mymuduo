@@ -16,14 +16,14 @@ public:
     bool valid(){microSecondsSinceEpoch_ > 0;}
     std::string toString() const;
 
-    int64_t microSecondsSinceEpoch() {return microSecondsSinceEpoch_;}
+    int64_t microSecondsSinceEpoch() const {return microSecondsSinceEpoch_;}
 
-    inline bool operator<(TimeStamp rhs)
+    inline bool operator<(TimeStamp rhs) const
     {
         return this->microSecondsSinceEpoch() < rhs.microSecondsSinceEpoch();
     }
 
-    inline bool operator==(TimeStamp rhs)
+    inline bool operator==(TimeStamp rhs) const
     {
         return this->microSecondsSinceEpoch() == rhs.microSecondsSinceEpoch();
     }

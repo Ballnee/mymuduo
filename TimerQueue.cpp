@@ -80,16 +80,16 @@ TimerQueue::~TimerQueue() {
 
 TimerId TimerQueue::addTimer(const TimerCallback &cb, TimeStamp when, double interval) {
     Timer *timer =new Timer(std::move(cb),when,interval) ;
-    loop_->runInLoop(
-            std::bind(&TimerQueue::addTimerInLoop,this,std::placeholders::_1)
-            );
+//    loop_->runInLoop(
+//            std::bind(&TimerQueue::addTimerInLoop,this,std::placeholders::_1)
+//            );
     return TimerId(timer,timer->sequence());
 }
 
 void TimerQueue::cancel(TimerId timerId) {
-    loop_->runInLoop(
-            std::bind(&TimerQueue::cancelInLoop,this,std::placeholders::_1)
-            );
+//    loop_->runInLoop(
+//            std::bind(&TimerQueue::cancelInLoop,this,std::placeholders::_1)
+//            );
 }
 
 void TimerQueue::addTimerInLoop(Timer* timer) {
@@ -112,7 +112,7 @@ void TimerQueue::cancelInLoop(TimerId timerId) {
     ActiveTimerSet::iterator it  = activeTimer_.find(timer);
 
     if(it != activeTimer_.end()) {
-        size_t n = timers_.erase(&Entry(it->first->expiration(), it->first));
+        size_t n = timers_.erase( Entry(it->first->expiration(), it->first));
         assert(n == 1);
         delete it->first;
         activeTimer_.erase(it);
@@ -137,7 +137,7 @@ bool TimerQueue::insert(Timer* timer) {
     }
     {
         //插入timers_中
-        std::pair<TimerList::iterator,bool> result = timers_.insert(&Entry (when, timer));
+        std::pair<TimerList::iterator,bool> result = timers_.insert(Entry(when, timer));
         assert(result.second);
 
     }
@@ -153,7 +153,7 @@ bool TimerQueue::insert(Timer* timer) {
 //rov
 std::vector<std::pair<TimeStamp,Timer*>> TimerQueue::getExpired(TimeStamp now) {
     assert(timers_.size() == activeTimer_.size());
-    std::vector<std::pair<TimeStamp,Timer*>> expired;
+    std::vector<Entry> expired;
     Entry  sentry(now,reinterpret_cast<Timer*>(UINTPTR_MAX));
     //返回第一个未到期的Timer的迭代器，说明之前的定时器全部到期
     // lower_bound含义是返回第一个值大于等于sentry元素的iterater
@@ -179,14 +179,13 @@ void TimerQueue::handleRead() {
     TimeStamp now(TimeStamp::now());
     readTimerfd(timerFd_,now); //epoll设置的水平触发，清除该事件
     //获取当前时刻之前所有的定时器（即超时定时器列表）
-    std::vector<std::pair<TimeStamp,Timer*>> expired = getExpired(now);
+    std::vector<Entry> expired = getExpired(now);
     callingExpiredTimer_ = true;
     cancelingTimers_.clear();
 
     for(std::vector<Entry>::iterator it = expired.begin();it != expired.end();++it) {
         //执行定时器回调
-        (*it).second->run();
-//        it->second->run();
+        it->second->run();
     }
     callingExpiredTimer_ = false;
     //不是一次性定时器 需要重启
@@ -196,22 +195,14 @@ void TimerQueue::handleRead() {
 void TimerQueue::reset(const std::vector <Entry> &expired, TimeStamp now) {
     TimeStamp nextExpire;
 
-    for (const Entry& it : expired)
-    {
-
-        ActiveTimer timer(it.second, it.second->sequence());
-        if (it.second->repeat()
-            && cancelingTimers_.find(timer) == cancelingTimers_.end())
-        {
-            it.second->restart(now);
-            insert(it.second);
-        }
-        else
-        {
-            delete it.second; //
+    for (typename std::vector<Entry>::const_iterator it = expired.begin();it != expired.end();++it) {
+        ActiveTimer timer(it->second,it->second->sequence());
+        //如果是重复的定时器并且 未取消 定时器，则重启该定时器
+        if (it->second->repeat() && cancelingTimers_.find(timer) == cancelingTimers_.end()) {
+            it->second->restart(now);
+            insert(it->second);
         }
     }
-
 
     if(!timers_.empty()) {
         //获取最早到期的定时器超时时间
