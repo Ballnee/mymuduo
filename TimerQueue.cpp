@@ -80,16 +80,16 @@ TimerQueue::~TimerQueue() {
 
 TimerId TimerQueue::addTimer(const TimerCallback &cb, TimeStamp when, double interval) {
     Timer *timer =new Timer(std::move(cb),when,interval) ;
-//    loop_->runInLoop(
-//            std::bind(&TimerQueue::addTimerInLoop,this,std::placeholders::_1)
-//            );
+    loop_->runInLoop(
+            std::bind(&TimerQueue::addTimerInLoop,this,timer)
+            );
     return TimerId(timer,timer->sequence());
 }
 
 void TimerQueue::cancel(TimerId timerId) {
-//    loop_->runInLoop(
-//            std::bind(&TimerQueue::cancelInLoop,this,std::placeholders::_1)
-//            );
+    loop_->runInLoop(
+            std::bind(&TimerQueue::cancelInLoop,this,timerId)
+            );
 }
 
 void TimerQueue::addTimerInLoop(Timer* timer) {
