@@ -32,3 +32,14 @@ public:
 private:
     int64_t microSecondsSinceEpoch_;
 };
+
+//int main(){
+//    TimeStamp t1(10);
+//    TimeStamp t2(20);
+//    if (t1 < t2) {
+//        std::cout<<"t1<t2\n";
+//    }else {
+//        std::cout<<"t1>=t2\n";
+//    }
+//
+//}

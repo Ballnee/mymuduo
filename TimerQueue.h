@@ -14,6 +14,7 @@
 #include "Timer.h"
 #include "memory"
 #include "TimerId.h"
+#include "EventLoop.h"
 class TimerQueue : noncopyable {
 public:
     TimerQueue(EventLoop *loop);
@@ -31,7 +32,8 @@ private:
     //一个根据定时器地址来存储，但是存储的定时器都是同一个，目的是为了区分同一到期时间的定时器？？？
     //支持定时器时间相同
     //Entry 时间戳和定时器对象的地址（定时器对象包括，超时时刻，回调函数，定时器序号，是否需要重复定时标志等）
-    using Entry = std::pair<TimeStamp,Timer*>;
+//    using Entry = std::pair<TimeStamp,Timer*>;
+    typedef std::pair<TimeStamp, Timer*> Entry;
     using TimerList = std::set<Entry>;
     using ActiveTimer = std::pair<Timer*,int64_t>;
     using ActiveTimerSet = std::set<ActiveTimer>;
@@ -44,7 +46,7 @@ private:
 
     void handleRead(); //timerfdChannel_的读函数
     //返回超时的定时器列表
-    std::vector<Entry> getExpired(TimeStamp now);
+    std::vector<std::pair<TimeStamp,Timer*>> getExpired(TimeStamp now);
 //    对超时的定时器重置，因为可能存在重复定时器
     void reset (const std::vector<Entry> &expired,TimeStamp now);
 
@@ -59,7 +61,7 @@ private:
     TimerList  timers_; // timers_是按到期时间排序，也是存放未到时间的定时器
     // for cancel()
     // timers_与activeTimers_保存的是相同的数据
-    // timers_是按到期时间排序，activeTimers_是按对象地址排序
+    // timers_是按到期时间排序，activeTimer_是按对象地址排序
     ActiveTimerSet activeTimer_;
 
     bool callingExpiredTimer_; /* atomic *///是否在处理过期定时器的标志

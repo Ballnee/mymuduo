@@ -6,7 +6,7 @@
 #define MYMUDUO_EVENTLOOP_H
 class Channel;
 class Poller;
-
+#include "Logger.h"
 #include "functional"
 #include "noncopyable.h"
 #include "vector"
