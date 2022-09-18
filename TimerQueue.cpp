@@ -79,9 +79,8 @@ TimerQueue::~TimerQueue() {
 }
 
 TimerId TimerQueue::addTimer(const TimerCallback &cb, TimeStamp when, double interval) {
-    LOG_INFO("addTimer expired time is %s",when.toString().c_str());
     Timer *timer =new Timer(std::move(cb),when,interval) ;
-    LOG_INFO("expired time = %s",when.toString().c_str());
+    LOG_INFO("addTimer %s",when.toString().c_str());
     loop_->runInLoop(
             std::bind(&TimerQueue::addTimerInLoop,this,timer)
             );
@@ -99,7 +98,6 @@ void TimerQueue::addTimerInLoop(Timer* timer) {
     // 插入一个定时器，有可能会使得最早到期的定时器发生改变
     bool earliestChanged = insert(timer);
     if(earliestChanged) {
-        LOG_INFO("register well +++++++++++\n");
         resetTimerfd(timerFd_,timer->expiration());
     }
 }
@@ -143,7 +141,6 @@ bool TimerQueue::insert(Timer* timer) {
         //插入timers_中
         std::pair<TimerList::iterator,bool> result = timers_.insert(Entry(when, timer));
         assert(result.second);
-        LOG_INFO("INSERT HERE ++++++\n");
     }
     {
         //插入到activeTimer_中
@@ -157,10 +154,6 @@ bool TimerQueue::insert(Timer* timer) {
 //rov
 std::vector<std::pair<TimeStamp,Timer*>> TimerQueue::getExpired(TimeStamp now) {
     assert(timers_.size() == activeTimer_.size());
-    LOG_INFO("timers size : %zu",timers_.size());
-    for(auto it = timers_.begin();it != timers_.end();++it) {
-        LOG_INFO("expired time is  %s\n",it->first.toString().c_str());
-    }
     std::vector<std::pair<TimeStamp,Timer*>> expired;
     std::pair<TimeStamp,Timer*>  sentry(now,reinterpret_cast<Timer*>(UINTPTR_MAX));
     //返回第一个未到期的Timer的迭代器，说明之前的定时器全部到期
@@ -168,10 +161,6 @@ std::vector<std::pair<TimeStamp,Timer*>> TimerQueue::getExpired(TimeStamp now) {
     //即*end >=sentry，从而end->first >now
     TimerList ::iterator end = lower_bound(timers_.begin(),timers_.end(),sentry);
     assert(end == timers_.end() || now < end->first);
-
-    if (timers_.begin() == end) {
-        LOG_INFO("===============");
-    }
 
     std::copy(timers_.begin(),end,back_inserter(expired));
     timers_.erase(timers_.begin(),end);
@@ -184,7 +173,6 @@ std::vector<std::pair<TimeStamp,Timer*>> TimerQueue::getExpired(TimeStamp now) {
     }
 
     assert(timers_.size() == activeTimer_.size());
-    LOG_INFO("getExpired------- %zu\n",expired.size());
     return expired;
 }
 
@@ -199,7 +187,6 @@ void TimerQueue::handleRead() {
 
     for(std::vector<Entry>::iterator it = expired.begin();it != expired.end();++it) {
         //执行定时器回调
-        LOG_INFO("read call back ++++++++++++++");
         it->second->run();
     }
     callingExpiredTimer_ = false;

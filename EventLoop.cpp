@@ -96,15 +96,15 @@ TimerId EventLoop::runAt(const TimeStamp &time, const TimerCallback &cb) {
 }
 
 TimerId EventLoop::runAfter(double delay, const TimerCallback &cb) {
-    int64_t delta = static_cast<uint64_t>(delay);
-    TimeStamp timer(delta + time(NULL));
+    int64_t delta = static_cast<uint64_t>(delay * TimeStamp::kMicroSecondsPerSecond);
+    TimeStamp timer(delta + TimeStamp::now().microSecondsSinceEpoch());
     std::cout<<"timer is "<<timer.toString().c_str()<<std::endl;
     return runAt(timer,cb);
 }
 
 TimerId EventLoop::runEvery(double interval, const TimerCallback& cb) {
-    int64_t delta = static_cast<uint64_t>(interval);
-    TimeStamp timer(delta + time(NULL));
+    int64_t delta = static_cast<uint64_t>(interval * TimeStamp::kMicroSecondsPerSecond);
+    TimeStamp timer(delta + TimeStamp::now().microSecondsSinceEpoch());
     return timerQueue_->addTimer(cb,timer,interval);
 }
 
