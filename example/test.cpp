@@ -44,7 +44,7 @@ private:
 int sum = 0;
 void Thread01(int id) {
     while(id++ < 1000)
-        asm volatile("lock add $1,%0": "+m"(sum));
+        asm volatile(" add $1,%0": "+m"(sum));
         //        sum++;
 }
 

@@ -7,6 +7,7 @@
 #include "unistd.h"
 #include "fcntl.h"
 #include "Logger.h"
+#include <time.h>
 #include "Poller.h"
 #include "errno.h"
 #include "Channel.h"
@@ -95,15 +96,16 @@ TimerId EventLoop::runAt(const TimeStamp &time, const TimerCallback &cb) {
 }
 
 TimerId EventLoop::runAfter(double delay, const TimerCallback &cb) {
-    int64_t delta = static_cast<uint64_t>(delay * TimeStamp::kMicroSecondsPerSecond);
-    TimeStamp time(delta + TimeStamp::now().microSecondsSinceEpoch());
-    return runAt(time,cb);
+    int64_t delta = static_cast<uint64_t>(delay);
+    TimeStamp timer(delta + time(NULL));
+    std::cout<<"timer is "<<timer.toString().c_str()<<std::endl;
+    return runAt(timer,cb);
 }
 
 TimerId EventLoop::runEvery(double interval, const TimerCallback& cb) {
-    int64_t delta = static_cast<uint64_t>(interval * TimeStamp::kMicroSecondsPerSecond);
-    TimeStamp time(delta + TimeStamp::now().microSecondsSinceEpoch());
-    return timerQueue_->addTimer(cb,time,interval);
+    int64_t delta = static_cast<uint64_t>(interval);
+    TimeStamp timer(delta + time(NULL));
+    return timerQueue_->addTimer(cb,timer,interval);
 }
 
 void EventLoop::cancel(TimerId timerId) {
