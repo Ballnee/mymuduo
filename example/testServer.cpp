@@ -14,8 +14,8 @@ public:
             loop_(loop){
         server_.setConnectionCallback(
             std::bind(&EchoServer::onConnection,this,std::placeholders::_1));
-//        server_.setMessageCallback(std::bind(&EchoServer::onMessage,this,
-//                                             std::placeholders::_1,std::placeholders::_2,std::placeholders::_3));
+        server_.setMessageCallback(std::bind(&EchoServer::onMessage,this,
+                                             std::placeholders::_1,std::placeholders::_2,std::placeholders::_3));
         server_.setThreadNum(3);
     }
     void start(){

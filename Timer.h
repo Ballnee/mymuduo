@@ -18,7 +18,10 @@ public:
     expiration_(when),
     interval_(interval),
     repeat_(interval>0.0),
-    sequence_(++s_numCreated_){}
+    sequence_(++s_numCreated_)
+    {
+
+    }
 
     void run(){
         callback_();
@@ -28,23 +31,10 @@ public:
     bool repeat() const { return repeat_; }
     int64_t sequence() const { return sequence_; }
 
-    void restart(TimeStamp now) {
-        //如果是重复的定时器，重新计算下一个超时时刻
-        if (repeat_){
-            int64_t delta = static_cast<int64_t>(interval_ * TimeStamp::kMicroSecondsPerSecond);
-            expiration_ = TimeStamp(now.microSecondsSinceEpoch() + delta);
-        }else{
-            expiration_ = TimeStamp::invalid();
-        }
-    }
+    void restart(TimeStamp now);
 
-    int64_t numCreated() {
-        int64_t ret = 0;
-        {
-            std::unique_lock<std::mutex> lock(latch_);
-            ret = s_numCreated_;
-        }
-        return ret;
+    static int64_t numCreated() {
+        return s_numCreated_;
     }
 
 private:
@@ -56,6 +46,6 @@ private:
 
 
     std::mutex latch_;
-    static std::atomic_int64_t     s_numCreated_; //定时器计数，当前已经创建的定时器数量
+    static std::atomic<int64_t>     s_numCreated_; //定时器计数，当前已经创建的定时器数量
 };
 #endif //MYMUDUO_TIMER_H

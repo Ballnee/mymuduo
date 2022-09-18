@@ -21,6 +21,8 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ball/mymuduo/TcpServer.cpp" "/home/ball/mymuduo/build/CMakeFiles/mymuduo.dir/TcpServer.o"
   "/home/ball/mymuduo/Thread.cpp" "/home/ball/mymuduo/build/CMakeFiles/mymuduo.dir/Thread.o"
   "/home/ball/mymuduo/TimeStamp.cpp" "/home/ball/mymuduo/build/CMakeFiles/mymuduo.dir/TimeStamp.o"
+  "/home/ball/mymuduo/Timer.cpp" "/home/ball/mymuduo/build/CMakeFiles/mymuduo.dir/Timer.o"
+  "/home/ball/mymuduo/TimerQueue.cpp" "/home/ball/mymuduo/build/CMakeFiles/mymuduo.dir/TimerQueue.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

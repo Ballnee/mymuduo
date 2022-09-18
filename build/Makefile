@@ -378,6 +378,36 @@ TimeStamp.s:
 	$(MAKE) -f CMakeFiles/mymuduo.dir/build.make CMakeFiles/mymuduo.dir/TimeStamp.s
 .PHONY : TimeStamp.s
 
+# target to build an object file
+Timer.o:
+	$(MAKE) -f CMakeFiles/mymuduo.dir/build.make CMakeFiles/mymuduo.dir/Timer.o
+.PHONY : Timer.o
+
+# target to preprocess a source file
+Timer.i:
+	$(MAKE) -f CMakeFiles/mymuduo.dir/build.make CMakeFiles/mymuduo.dir/Timer.i
+.PHONY : Timer.i
+
+# target to generate assembly for a file
+Timer.s:
+	$(MAKE) -f CMakeFiles/mymuduo.dir/build.make CMakeFiles/mymuduo.dir/Timer.s
+.PHONY : Timer.s
+
+# target to build an object file
+TimerQueue.o:
+	$(MAKE) -f CMakeFiles/mymuduo.dir/build.make CMakeFiles/mymuduo.dir/TimerQueue.o
+.PHONY : TimerQueue.o
+
+# target to preprocess a source file
+TimerQueue.i:
+	$(MAKE) -f CMakeFiles/mymuduo.dir/build.make CMakeFiles/mymuduo.dir/TimerQueue.i
+.PHONY : TimerQueue.i
+
+# target to generate assembly for a file
+TimerQueue.s:
+	$(MAKE) -f CMakeFiles/mymuduo.dir/build.make CMakeFiles/mymuduo.dir/TimerQueue.s
+.PHONY : TimerQueue.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -438,6 +468,12 @@ help:
 	@echo "... TimeStamp.o"
 	@echo "... TimeStamp.i"
 	@echo "... TimeStamp.s"
+	@echo "... Timer.o"
+	@echo "... Timer.i"
+	@echo "... Timer.s"
+	@echo "... TimerQueue.o"
+	@echo "... TimerQueue.i"
+	@echo "... TimerQueue.s"
 .PHONY : help
 
 

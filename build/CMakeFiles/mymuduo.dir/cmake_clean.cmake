@@ -16,6 +16,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/mymuduo.dir/TcpServer.o"
   "CMakeFiles/mymuduo.dir/Thread.o"
   "CMakeFiles/mymuduo.dir/TimeStamp.o"
+  "CMakeFiles/mymuduo.dir/Timer.o"
+  "CMakeFiles/mymuduo.dir/TimerQueue.o"
   "../lib/libmymuduo.pdb"
   "../lib/libmymuduo.so"
 )

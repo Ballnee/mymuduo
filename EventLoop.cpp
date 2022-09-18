@@ -32,6 +32,7 @@ EventLoop::EventLoop()
         :looping_(false),
         quit_(false),
         callingPendingFunctors_(false),
+        timerQueue_(new TimerQueue(this)),
         threadId_(CurrentThread::tid()),
         poller_(Poller::newDefaultPoller(this)),
         wakeupFd_(createEventFd()),
@@ -88,6 +89,27 @@ void EventLoop:: loop() {
         looping_ = false;
 
 }
+
+TimerId EventLoop::runAt(const TimeStamp &time, const TimerCallback &cb) {
+    return timerQueue_->addTimer(cb,time,0.0);
+}
+
+TimerId EventLoop::runAfter(double delay, const TimerCallback &cb) {
+    int64_t delta = static_cast<uint64_t>(delay * TimeStamp::kMicroSecondsPerSecond);
+    TimeStamp time(delta + TimeStamp::now().microSecondsSinceEpoch());
+    return runAt(time,cb);
+}
+
+TimerId EventLoop::runEvery(double interval, const TimerCallback& cb) {
+    int64_t delta = static_cast<uint64_t>(interval * TimeStamp::kMicroSecondsPerSecond);
+    TimeStamp time(delta + TimeStamp::now().microSecondsSinceEpoch());
+    return timerQueue_->addTimer(cb,time,interval);
+}
+
+void EventLoop::cancel(TimerId timerId) {
+    return timerQueue_->cancel(timerId);
+}
+
 //在当前线程中执行cb
 void EventLoop::runInLoop(Functor cb) {
     if (isInLoopThread()) {//在当前线程中执行cb

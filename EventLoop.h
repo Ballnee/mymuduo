@@ -6,6 +6,7 @@
 #define MYMUDUO_EVENTLOOP_H
 class Channel;
 class Poller;
+class TimerQueue;
 #include "Logger.h"
 #include "functional"
 #include "noncopyable.h"
@@ -13,6 +14,7 @@ class Poller;
 #include "atomic"
 #include "memory"
 #include "TimeStamp.h"
+#include "TimerQueue.h"
 #include "mutex"
 #include "CurrentThread.h"
 //事件循环类  主要包含了两个大模块  Channel  Poller （epoll的抽象）
@@ -27,6 +29,10 @@ public:
     void loop();
     //退出事件循环
     void quit();
+    TimerId runAt(const TimeStamp& time,const TimerCallback& cb);
+    TimerId runAfter(double delay, const TimerCallback& cb);
+    TimerId runEvery(double interval,const TimerCallback& cb);
+    void cancel(TimerId timerId);
     //在当前loop中执行cb
     void runInLoop(Functor cb);
     //把cb放入队列，唤醒loop所在的线程，执行cb
@@ -56,6 +62,7 @@ private:
     const pid_t threadId_; // 记录当前loop的线程id
     TimeStamp pollReturnTime_;// poller返回发生事件的channels的时间点
     std::unique_ptr<Poller> poller_;
+    std::unique_ptr<TimerQueue> timerQueue_;
     int wakeupFd_;//主要作用，当mainLoop获取一个新用户的channel，通过轮询算法选择一个subloop，通过该成员唤醒subloop
     std::unique_ptr<Channel> wakeupChannel_;
 
