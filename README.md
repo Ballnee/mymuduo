@@ -1,5 +1,5 @@
  # mymuduo  one thread per loop 
-#go语言的思想，不要用共享去通信（即生产者消费者模型），使用通信去共享。
+#go语言的思想，不要用共享去通信（即生产者消费者模型），使用通信去共享。 
 Socket类：封装服务器fd，提供bind，listen，accept方法监听新连接。构造函数参数：sockFd
 InetAddress类：封装sockaddr_in ipv4地址，提供把ip和端口转换为字符串。构造函数参数：端口和ip
 Channel类：封装需要监听的fd并绑定loop，注册在epoll，和设置事件发生的回调。构造函数参数：loop和fd。
